@@ -1,42 +1,45 @@
 package com.citius.models;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "usergroup")
-public class UserGroup{
-
-//	@GeneratedValue(strategy=GenerationType.AUTO)
-//	@Column(name="user_group_id")
-	private Long userGroupId;
-	
-	@Column(name ="user_role")
+public class UserGroup {
 	@Id
+	private Long userRoleId;
 	private String userRole;
-	
-//	@OneToMany(mappedBy = "userGroup", cascade=CascadeType.PERSIST)
-//	private List<User> user;
-	
-//	@ManyToOne( mappedBy = "userGroups",cascade = CascadeType.PERSIST)
-//	@JoinColumn(name = "user_Id")
-//	private User user;
-	
-	@OneToMany(cascade = CascadeType.PERSIST)
-	private List<User> user;
 
-	public Long getUserGroupId() {
-		return userGroupId;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "userGroup")
+	@JsonIgnore
+	private Set<User_Roles> userRoles = new HashSet<User_Roles>();
+
+	public UserGroup() {
+		// TODO Auto-generated constructor stub
 	}
 
-	public void setUserGroupId(Long userGroupId) {
-		this.userGroupId = userGroupId;
+	public UserGroup(Long userRoleId, String userRole, Set<User_Roles> userRoles) {
+		super();
+		this.userRoleId = userRoleId;
+		this.userRole = userRole;
+		this.userRoles = userRoles;
+	}
+
+	public Long getUserRoleId() {
+		return userRoleId;
+	}
+
+	public void setUserRoleId(Long userRoleId) {
+		this.userRoleId = userRoleId;
 	}
 
 	public String getUserRole() {
@@ -47,18 +50,12 @@ public class UserGroup{
 		this.userRole = userRole;
 	}
 
-	public List<User> getUser() {
-		return user;
+	public Set<User_Roles> getUserRoles() {
+		return userRoles;
 	}
 
-	public void setUser(List<User> user) {
-		this.user = user;
+	public void setUserRoles(Set<User_Roles> userRoles) {
+		this.userRoles = userRoles;
 	}
-
-
-
-
-	
-
 
 }
