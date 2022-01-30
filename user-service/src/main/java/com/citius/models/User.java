@@ -13,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -34,16 +36,17 @@ public class User {
 	private String userFirstName;
 	private String userLastName;
 
-	@NotNull(message = "Email Should Not be Null")
+	@NotNull(message = "Email Should Not be Null")@NotEmpty @NotBlank
 	private String userEmail;
 
 	private LocalDate userDOB;
 
-	@Size(max = 10, message = "Contact No shoule be of 10 digit")
+	@Size(min = 10,max = 10, message = "Contact No shoule be of 10 digit")
 	private String userContactNo;
 
 	@NotNull(message = "password should not be null")
 	private String password;
+	
 	private Boolean isActive = true;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
@@ -153,13 +156,6 @@ public class User {
 		this.password = password;
 	}
 
-	public Boolean getIaActive() {
-		return isActive;
-	}
-
-	public void setIaActive(Boolean iaActive) {
-		this.isActive = iaActive;
-	}
 
 	public Set<User_Roles> getUserRoles() {
 		return userRoles;
@@ -173,7 +169,7 @@ public class User {
 	public String toString() {
 		return "User [userId=" + userId + ", username=" + username + ", userTitle=" + userTitle + ", userFirstName="
 				+ userFirstName + ", userLastName=" + userLastName + ", userEmail=" + userEmail + ", userDOB=" + userDOB
-				+ ", userContactNo=" + userContactNo + ", password=" + password + ", iaActive=" + isActive
+				+ ", userContactNo=" + userContactNo + ", password=" + password + ", isActive=" + isActive
 				+ ", userRoles=" + userRoles + "]";
 	}
 

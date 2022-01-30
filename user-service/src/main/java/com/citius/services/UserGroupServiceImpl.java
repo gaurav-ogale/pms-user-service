@@ -21,16 +21,4 @@ public class UserGroupServiceImpl implements UserGroupService{
 		return null;
 	}
 
-//	@Autowired
-//	UserGroupDao userGroupDao;
-//	@Override
-//	public String addUserGroup(UserGroup userGroup) {
-//		return userGroupDao.addUserGroup(userGroup);
-//	}
-//	@Override
-//	public List<UserGroup> getAllUserGroup() {
-//		return userGroupDao.getAllUserGroup();
-//	}
-
-
 }

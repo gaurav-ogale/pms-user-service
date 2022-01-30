@@ -34,9 +34,9 @@ public class UserServiceImplTest {
 	@Test
 	void createUserTest() throws Exception {
 		User user = new User();
-		user.setUsername("gaurav_ogale1245244");
+		user.setUsername("gaurav_ogale123");
 		user.setPassword("$2a$10$slYQmyNdGzTn7ZLBXBChFOC9f6kFjAqPhccnP6DxlWXx2lPk1C3G6");
-		user.setUserEmail("test@test.com");
+		user.setUserEmail(null);
 		user.setUserContactNo("873787383");
 		user.setUserDOB(LocalDate.of(1995, 11, 1));
 		user.setUserFirstName("Gaurav");
@@ -82,5 +82,18 @@ public class UserServiceImplTest {
 	void getAllUsers() {
 		assertEquals(7,userServiceImpl.getAllUsers().size());		
 	}
+	
+	@Test
+	void updateIsActive() {
+		String str = userServiceImpl.updateIsActive("gauravO");
+		assertEquals("Success", str);
+	}
+	
+	@Test
+	void getUserRoles() {
+		Set<UserGroup> userGroups = userServiceImpl.getUserRoles("gaurav_ogale12");
+		System.out.println(userGroups);
+	}
+	
 
 }

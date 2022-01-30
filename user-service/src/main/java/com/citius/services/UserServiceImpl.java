@@ -1,5 +1,6 @@
 package com.citius.services;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -38,13 +39,13 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public AuthUser authenticateUser(String username) throws Exception {
-		
+
 		AuthUser userCreds = new AuthUser();
 		User user = userRepository.findByUsername(username);
-		if(user!=null) {
+		if (user != null) {
 			userCreds.setUsername(user.getUsername());
 			userCreds.setPassword(user.getPassword());
-		}		
+		}
 		return userCreds;
 	}
 
@@ -69,26 +70,46 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Set<User_Roles> getUserRoles(String userName) {
+	public Set<UserGroup> getUserRoles(String userName) {
+
 		User userDetails = userRepository.findByUsername(userName);
-	
-		if(userDetails != null) {
-			return userDetails.getUserRoles();
+		Set<UserGroup> userGroups = new HashSet<>();
+
+		if (userDetails.getUserRoles() != null) {
+			userDetails.getUserRoles().stream().forEach(userDetail -> {
+				UserGroup userGroup = userDetail.getUserGroup();
+				userGroups.add(userGroup);
+			});
+		} else {	
+			return null;
 		}
-		
-		return null;
+
+		return userGroups;
 	}
-	
+
 	public User_Roles addRolesToUser(long userId, long userGroupId) {
 		User_Roles userRoles = new User_Roles();
-		
-		User user = userRepository.findById(userId).get();		
-		UserGroup userGroup = userGroupRepository.getById(userGroupId);		
+
+		User user = userRepository.findById(userId).get();
+		UserGroup userGroup = userGroupRepository.getById(userGroupId);
 		userRoles.setUser(user);
 		userRoles.setUserGroup(userGroup);
-		
+
 		return userRoleRepository.save(userRoles);
 	}
 
+	@Override
+	public String updateIsActive(String userName) {
+		User user = new User();
+		user = userRepository.findByUsername(userName);
+		Boolean isActive = user.getIsActive();
+		user.setIsActive(!isActive);
+		user = userRepository.save(user);
+
+		if (user.getIsActive() != isActive) {
+			return "Success";
+		}
+		return null;
+	}
 
 }
