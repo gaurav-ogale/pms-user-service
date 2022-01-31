@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.citius.models.AuthUser;
 import com.citius.models.User;
 import com.citius.models.UserGroup;
 import com.citius.models.User_Roles;
@@ -35,12 +34,10 @@ public class UserController {
 
 	@Operation(summary = "Used for Authentication of Users - called by Gateway")
 	@GetMapping("/auth/{username}")
-	public AuthUser authenticateUser(@PathVariable String username) {
-		try {
-			return userService.authenticateUser(username);
-		} catch (Exception e) {
-			return new AuthUser(null, null);
-		}
+	public User authenticateUser(@PathVariable String username) {
+
+		return userService.authenticateUser(username);
+
 	}
 
 	@Operation(summary = "Used to get all Users from System")

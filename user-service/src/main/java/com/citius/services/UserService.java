@@ -5,7 +5,6 @@ import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
-import com.citius.models.AuthUser;
 import com.citius.models.User;
 import com.citius.models.UserGroup;
 import com.citius.models.User_Roles;
@@ -15,7 +14,7 @@ public interface UserService {
 
 	List<User> getAllUsers();
 	User getUser(User user);
-	AuthUser authenticateUser(String username) throws Exception;
+	User authenticateUser(String username);
 	Set<UserGroup> getUserRoles(String userName);
 	User_Roles addRolesToUser(long userId, long userGroupId);	
 	User createUser(User user, Set<User_Roles> userRoles) throws Exception;

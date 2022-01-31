@@ -7,7 +7,6 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.citius.models.AuthUser;
 import com.citius.models.User;
 import com.citius.models.UserGroup;
 import com.citius.models.User_Roles;
@@ -38,15 +37,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public AuthUser authenticateUser(String username) throws Exception {
+	public User authenticateUser(String username) {
 
-		AuthUser userCreds = new AuthUser();
-		User user = userRepository.findByUsername(username);
+		User user = new User();
+		user = userRepository.findByUsername(username);
 		if (user != null) {
-			userCreds.setUsername(user.getUsername());
-			userCreds.setPassword(user.getPassword());
+			return user;
 		}
-		return userCreds;
+		return user;
 	}
 
 	@Override
@@ -80,7 +78,7 @@ public class UserServiceImpl implements UserService {
 				UserGroup userGroup = userDetail.getUserGroup();
 				userGroups.add(userGroup);
 			});
-		} else {	
+		} else {
 			return null;
 		}
 
