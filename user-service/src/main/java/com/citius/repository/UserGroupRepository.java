@@ -6,4 +6,5 @@ import com.citius.models.UserGroup;
 
 public interface UserGroupRepository extends JpaRepository<UserGroup, Long>{
 
+	UserGroup getUserGroupByuserRole(String userGroup);
 }

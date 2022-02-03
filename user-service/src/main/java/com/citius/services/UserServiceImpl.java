@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.citius.models.User;
 import com.citius.models.UserGroup;
+import com.citius.models.UserRoles;
 import com.citius.models.User_Roles;
 import com.citius.repository.UserGroupRepository;
 import com.citius.repository.UserRolesRepository;
@@ -48,19 +49,30 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User createUser(User user, Set<User_Roles> userRoles) throws Exception {
+	public User createUser(User user, Boolean isPatient, Set<UserGroup> employeeRoleMap) throws Exception {
+		Set<User_Roles> roleMap = new HashSet<User_Roles>();
 
 		User tempUser = this.userRepository.findByUsername(user.getUsername());
 
 		if (tempUser != null)
 			throw new Exception("User Already Exists !");
 		else {
-			// Save User Role
-			if (userRoles != null) {
-				userRoles.stream().forEach(userRole -> userGroupRepository.save(userRole.getUserGroup()));
-				user.getUserRoles().addAll(userRoles);
+			if (isPatient) {
+				// Set default UserGroup for All - Patient
+				User_Roles role = new User_Roles();
+				role.setUser(user);
+				role.setUserGroup(userGroupRepository.getUserGroupByuserRole(UserRoles.ROLE_PATIENT.name()));
+				roleMap.add(role);
+				user.getUserRoles().addAll(roleMap);
+			} else {
+				employeeRoleMap.stream().forEach(userGrp -> {
+					User_Roles role = new User_Roles();
+					role.setUser(user);
+					role.setUserGroup(userGrp);
+					roleMap.add(role);
+				});
+				user.getUserRoles().addAll(roleMap);
 			}
-			// save User
 			tempUser = userRepository.save(user);
 		}
 

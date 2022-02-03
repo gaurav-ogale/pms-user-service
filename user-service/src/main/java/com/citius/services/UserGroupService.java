@@ -6,7 +6,7 @@ import com.citius.models.UserGroup;
 
 public interface UserGroupService {
 	
-	String addUserGroup(UserGroup userGroup);
+	UserGroup addUserGroup(UserGroup userGroup) throws Exception;
 	
 	List<UserGroup> getAllUserGroup();
 	

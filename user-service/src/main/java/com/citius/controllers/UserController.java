@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.citius.models.Employee;
 import com.citius.models.User;
 import com.citius.models.UserGroup;
 import com.citius.models.User_Roles;
@@ -50,8 +51,14 @@ public class UserController {
 	@Operation(summary = "Add new User Group")
 	@PostMapping("/usergroup")
 	public ResponseEntity<?> addUserGroup(@RequestBody UserGroup userGroup) {
-		String res = userGroupService.addUserGroup(userGroup);
-		if (res.equalsIgnoreCase("success"))
+		UserGroup res = new UserGroup();
+		try {
+			res = userGroupService.addUserGroup(userGroup);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (res != null)
 			return new ResponseEntity<HttpStatus>(HttpStatus.CREATED);
 		return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
@@ -82,17 +89,30 @@ public class UserController {
 		return userService.getUserRoles(username);
 	}
 
-	@Operation(summary = "Create New User")
-	@PostMapping("/userCreate")
+	@Operation(summary = "Create New Patient")
+	@PostMapping("/user")
 	public User createUser(@RequestBody User user) {
-		Set<User_Roles> userRoles = user.getUserRoles();
-		userRoles.stream().forEach(userRole -> {
-			userRole.setUser(user);
-		});
-
 		User createdUser = new User();
 		try {
-			createdUser = userService.createUser(user, userRoles);
+			createdUser = userService.createUser(user, true, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return createdUser;
+	}
+
+	@Operation(summary = "Create New Employee")
+	@PostMapping("/employee")
+	public User createEmployee(@RequestBody Employee employee) {
+		User createdUser = new User();
+		try {
+
+			if (employee.getUserGroup() != null) {
+				createdUser = userService.createUser(employee.getUser(), false, employee.getUserGroup());
+			} else {
+				throw new Exception("UserGroup Should not be Empty for Employees");
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

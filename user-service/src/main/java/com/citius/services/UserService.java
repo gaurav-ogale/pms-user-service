@@ -17,7 +17,7 @@ public interface UserService {
 	User authenticateUser(String username);
 	Set<UserGroup> getUserRoles(String userName);
 	User_Roles addRolesToUser(long userId, long userGroupId);	
-	User createUser(User user, Set<User_Roles> userRoles) throws Exception;
+	User createUser(User user , Boolean isPatient, Set<UserGroup> employeeRoleMap) throws Exception;
 	
 	String updateIsActive(String userName);
 }
