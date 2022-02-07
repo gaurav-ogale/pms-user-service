@@ -7,6 +7,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.citius.exception.UserInternalServerException;
 import com.citius.models.User;
 import com.citius.models.UserGroup;
 import com.citius.models.UserRoles;
@@ -14,6 +15,7 @@ import com.citius.models.User_Roles;
 import com.citius.repository.UserGroupRepository;
 import com.citius.repository.UserRolesRepository;
 import com.citius.repository.UsersRepository;
+import com.citius.utils.CommonKeys;
 
 @Component
 public class UserServiceImpl implements UserService {
@@ -55,7 +57,7 @@ public class UserServiceImpl implements UserService {
 		User tempUser = this.userRepository.findByUsername(user.getUsername());
 
 		if (tempUser != null)
-			throw new Exception("User Already Exists !");
+			throw new UserInternalServerException("Username Already Exits, Please login");
 		else {
 			if (isPatient) {
 				// Set default UserGroup for All - Patient
@@ -91,7 +93,7 @@ public class UserServiceImpl implements UserService {
 				userGroups.add(userGroup);
 			});
 		} else {
-			return null;
+			throw new UserInternalServerException("Not Valid Operation");
 		}
 
 		return userGroups;
@@ -119,7 +121,20 @@ public class UserServiceImpl implements UserService {
 		if (user.getIsActive() != isActive) {
 			return "Success";
 		}
-		return null;
+		throw new UserInternalServerException("Invalid Operation!");
+	}
+
+	@Override
+	public String forgetPassword(String username) {
+		User user = new User();
+		user = userRepository.findByUsername(username);
+		if (user != null) {
+			user.setPassword(CommonKeys.DEFAULT_ENCRYPTED_PASSWORD);
+			userRepository.save(user);
+			// Send Inputs to Notification Service with Default Password on User's Email
+			return CommonKeys.SUCCESS;
+		} else
+			throw new UserInternalServerException("No User Found for Entered Data");
 	}
 
 }

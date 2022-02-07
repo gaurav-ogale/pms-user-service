@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.citius.exception.UserInternalServerException;
 import com.citius.models.UserGroup;
 import com.citius.models.UserRoles;
 import com.citius.repository.UserGroupRepository;
@@ -28,7 +29,7 @@ public class UserGroupServiceImpl implements UserGroupService {
 		if (validRoleValue)
 			return userGroupRepositroy.save(userGroup);
 		else
-			throw new Exception("Not Valid Data!");
+			throw new UserInternalServerException("Not Valid User Group Name!");
 	}
 
 	@Override

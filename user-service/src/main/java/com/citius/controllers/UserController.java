@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.citius.exception.UserInternalServerException;
 import com.citius.models.Employee;
 import com.citius.models.User;
 import com.citius.models.UserGroup;
@@ -23,8 +24,10 @@ import com.citius.services.UserGroupService;
 import com.citius.services.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
+@Tag(description = "This Service will Handle All User Management,User Access Requests", name = "User Controller")
 public class UserController {
 
 	@Autowired
@@ -36,7 +39,6 @@ public class UserController {
 	@Operation(summary = "Used for Authentication of Users - called by Gateway")
 	@GetMapping("/auth/{username}")
 	public User authenticateUser(@PathVariable String username) {
-
 		return userService.authenticateUser(username);
 
 	}
@@ -50,17 +52,12 @@ public class UserController {
 
 	@Operation(summary = "Add new User Group")
 	@PostMapping("/usergroup")
-	public ResponseEntity<?> addUserGroup(@RequestBody UserGroup userGroup) {
-		UserGroup res = new UserGroup();
-		try {
-			res = userGroupService.addUserGroup(userGroup);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if (res != null)
+	public ResponseEntity<?> addUserGroup(@RequestBody UserGroup userGroup) throws Exception {
+
+		if (userGroupService.addUserGroup(userGroup) != null)
 			return new ResponseEntity<HttpStatus>(HttpStatus.CREATED);
 		return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
+
 	}
 
 	@Operation(summary = "Get All User Groups from System")
@@ -89,33 +86,27 @@ public class UserController {
 		return userService.getUserRoles(username);
 	}
 
-	@Operation(summary = "Create New Patient")
+	@Operation(summary = "Create New User")
 	@PostMapping("/user")
-	public User createUser(@RequestBody User user) {
+	public User createUser(@RequestBody User user) throws Exception {
 		User createdUser = new User();
-		try {
-			createdUser = userService.createUser(user, true, null);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
+		createdUser = userService.createUser(user, true, null);
+
 		return createdUser;
 	}
 
 	@Operation(summary = "Create New Employee")
 	@PostMapping("/employee")
-	public User createEmployee(@RequestBody Employee employee) {
+	public User createEmployee(@RequestBody Employee employee) throws Exception {
 		User createdUser = new User();
-		try {
 
-			if (employee.getUserGroup() != null) {
-				createdUser = userService.createUser(employee.getUser(), false, employee.getUserGroup());
-			} else {
-				throw new Exception("UserGroup Should not be Empty for Employees");
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (employee.getUserGroup() != null) {
+			createdUser = userService.createUser(employee.getUser(), false, employee.getUserGroup());
+		} else {
+			throw new UserInternalServerException("UserGroup Should not be Empty for Employees");
 		}
+
 		return createdUser;
 	}
 
@@ -127,6 +118,12 @@ public class UserController {
 			return new ResponseEntity<HttpStatus>(HttpStatus.OK);
 		return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
 
+	}
+	
+	@Operation(summary = "Password Reset")
+	@GetMapping("/reset/{username}")
+	public ResponseEntity<?> forgotPassword(@PathVariable String username){
+		return null;
 	}
 
 }
