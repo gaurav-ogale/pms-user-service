@@ -1,6 +1,5 @@
 package com.citius.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
@@ -73,27 +72,26 @@ public class UserServiceImplTest {
 		userRoles.add(userRole1);
 		userRoles.add(userRole2);
 
-		//User testUser = userServiceImpl.createUser(user, userRoles);
-		//System.out.println(testUser.toString());
-		//assertThat(testUser.getUserId()).isNotNull();
+		// User testUser = userServiceImpl.createUser(user, userRoles);
+		// System.out.println(testUser.toString());
+		// assertThat(testUser.getUserId()).isNotNull();
 	}
 
 	@Test
 	void getAllUsers() {
-		assertEquals(7,userServiceImpl.getAllUsers().size());		
+		assertEquals(7, userServiceImpl.getAllUsers().size());
 	}
-	
+
 	@Test
 	void updateIsActive() {
 		String str = userServiceImpl.updateIsActive("gauravO");
 		assertEquals("Success", str);
 	}
-	
+
 	@Test
 	void getUserRoles() {
 		Set<UserGroup> userGroups = userServiceImpl.getUserRoles("gaurav_ogale12");
 		System.out.println(userGroups);
 	}
-	
 
 }

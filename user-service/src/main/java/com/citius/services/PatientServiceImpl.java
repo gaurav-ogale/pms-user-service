@@ -36,9 +36,6 @@ public class PatientServiceImpl implements PatientService {
 		if (user != null) {
 			patient.setUser(user);
 			patient.setAge(CommonUtils.calculateAge(user.getUserDOB()));
-			patient.getLanguages().forEach(lang -> {
-				lang.setPatient(patient);
-			});
 			PatientRelative patientRelative = patientRelativeRepository.save(patient.getPatientRelative());
 			if (patientRelative != null) {
 				patient.setPatientRelative(patientRelative);
@@ -56,7 +53,7 @@ public class PatientServiceImpl implements PatientService {
 
 	@Override
 	public Patient getPatientData(long patientId) {
-		return patientRepository.findById(patientId).orElseThrow(()-> new PatientNotFoundExcepion());
+		return patientRepository.findById(patientId).orElseThrow(() -> new PatientNotFoundExcepion());
 	}
 
 }

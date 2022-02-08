@@ -3,23 +3,28 @@ package com.citius.models.patientDetails;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
+
 import com.citius.models.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import com.vladmihalcea.hibernate.type.json.JsonStringType;
 
+@TypeDefs({ @TypeDef(name = "json", typeClass = JsonStringType.class),
+		@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class) })
 @Entity
 public class Patient {
 
@@ -41,9 +46,9 @@ public class Patient {
 	@OneToOne
 	@JoinColumn(name = "patient_relativeId")
 	private PatientRelative patientRelative;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "patient")
-	@JsonIgnoreProperties("patient")
-	private Set<Language> languages = new HashSet<Language>();
+	@Type(type = "jsonb")
+	@Column(columnDefinition = "json", name = "languages")
+	private Set<String> languages = new HashSet<String>();
 
 	// @OneToMany
 	// private Set<Allergies> allergies = new HashSet<>();
@@ -112,11 +117,11 @@ public class Patient {
 		this.patientRelative = patientRelative;
 	}
 
-	public Set<Language> getLanguages() {
+	public Set<String> getLanguages() {
 		return languages;
 	}
 
-	public void setLanguages(Set<Language> languages) {
+	public void setLanguages(Set<String> languages) {
 		this.languages = languages;
 	}
 

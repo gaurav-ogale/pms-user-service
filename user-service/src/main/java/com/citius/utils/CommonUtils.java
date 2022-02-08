@@ -12,4 +12,8 @@ public class CommonUtils {
 		return 0;
 	}
 
+//	public static String[] splitShiftTimes(String shiftTimes) {
+//		return shiftTimes.split("-");
+//	}
+
 }
