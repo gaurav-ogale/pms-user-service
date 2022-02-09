@@ -6,8 +6,10 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import com.citius.exception.UserInternalServerException;
+import com.citius.models.Email;
 import com.citius.models.User;
 import com.citius.models.UserGroup;
 import com.citius.models.UserRoles;
@@ -28,6 +30,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRolesRepository userRoleRepository;
+
+	@Autowired
+	private RestTemplate restTemplate;
 
 	@Override
 	public List<User> getAllUsers() {
@@ -135,6 +140,15 @@ public class UserServiceImpl implements UserService {
 			return CommonKeys.SUCCESS;
 		} else
 			throw new UserInternalServerException("No User Found for Entered Data");
+	}
+
+	@Override
+	public String sendPasswordResetEmail(String username) {
+
+		Email email = new Email("gaurav.ogale@outlook.com", "Test", username, "USER-SERVICE");
+
+		String str = restTemplate.postForObject("http://NOTIFICATION-SERVICE/", email, String.class);
+		return str;
 	}
 
 }

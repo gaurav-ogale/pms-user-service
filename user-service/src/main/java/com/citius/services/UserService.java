@@ -20,4 +20,5 @@ public interface UserService {
 	User createUser(User user , Boolean isPatient, Set<UserGroup> employeeRoleMap) throws Exception;
 	String forgetPassword(String username);
 	String updateIsActive(String userName);
+	String sendPasswordResetEmail(String username);
 }

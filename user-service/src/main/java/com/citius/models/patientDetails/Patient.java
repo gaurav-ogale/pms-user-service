@@ -1,8 +1,5 @@
 package com.citius.models.patientDetails;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,11 +17,13 @@ import org.hibernate.annotations.TypeDefs;
 import com.citius.models.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
 
 @TypeDefs({ @TypeDef(name = "json", typeClass = JsonStringType.class),
-		@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class) })
+		@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class),
+		@TypeDef(name = "array", typeClass = StringArrayType.class) })
 @Entity
 public class Patient {
 
@@ -46,9 +45,9 @@ public class Patient {
 	@OneToOne
 	@JoinColumn(name = "patient_relativeId")
 	private PatientRelative patientRelative;
-	@Type(type = "jsonb")
-	@Column(columnDefinition = "json", name = "languages")
-	private Set<String> languages = new HashSet<String>();
+	@Type(type = "array")
+	@Column(columnDefinition = "text[]", name = "languages")
+	private String[] languages;
 
 	// @OneToMany
 	// private Set<Allergies> allergies = new HashSet<>();
@@ -117,11 +116,11 @@ public class Patient {
 		this.patientRelative = patientRelative;
 	}
 
-	public Set<String> getLanguages() {
+	public String[] getLanguages() {
 		return languages;
 	}
 
-	public void setLanguages(Set<String> languages) {
+	public void setLanguages(String[] languages) {
 		this.languages = languages;
 	}
 

@@ -122,8 +122,9 @@ public class UserController {
 	
 	@Operation(summary = "Password Reset")
 	@GetMapping("/reset/{username}")
-	public ResponseEntity<?> forgotPassword(@PathVariable String username){
-		return null;
+	public String forgotPassword(@PathVariable String username){
+		String res = userService.sendPasswordResetEmail(username);
+		return res;
 	}
 
 }
