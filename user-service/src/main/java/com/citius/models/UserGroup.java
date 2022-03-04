@@ -27,11 +27,10 @@ public class UserGroup {
 		// TODO Auto-generated constructor stub
 	}
 
-	public UserGroup(Long userRoleId, String userRole, Set<User_Roles> userRoles) {
+	public UserGroup(Long userRoleId, String userRole) {
 		super();
 		this.userRoleId = userRoleId;
 		this.userRole = userRole;
-		this.userRoles = userRoles;
 	}
 
 	public Long getUserRoleId() {
