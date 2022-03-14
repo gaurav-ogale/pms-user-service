@@ -64,22 +64,22 @@ public class UserServiceImpl implements UserService {
 		if (tempUser != null)
 			throw new UserInternalServerException("Username Already Exits, Please login");
 		else {
-			if (isPatient) {
-				// Set default UserGroup for All - Patient
-				User_Roles role = new User_Roles();
-				role.setUser(user);
-				role.setUserGroup(userGroupRepository.getUserGroupByuserRole(UserRoles.ROLE_PATIENT.name()));
-				roleMap.add(role);
-				user.getUserRoles().addAll(roleMap);
-			} else {
-				employeeRoleMap.stream().forEach(userGrp -> {
-					User_Roles role = new User_Roles();
-					role.setUser(user);
-					role.setUserGroup(userGrp);
-					roleMap.add(role);
-				});
-				user.getUserRoles().addAll(roleMap);
-			}
+//			if (isPatient) {
+//				// Set default UserGroup for All - Patient
+//				User_Roles role = new User_Roles();
+//				role.setUser(user);
+//				role.setUserGroup(userGroupRepository.getUserGroupByuserRole(UserRoles.ROLE_PATIENT.name()));
+//				roleMap.add(role);
+//				user.getUserRoles().addAll(roleMap);
+//			} else {
+//				employeeRoleMap.stream().forEach(userGrp -> {
+//					User_Roles role = new User_Roles();
+//					role.setUser(user);
+//					role.setUserGroup(userGrp);
+//					roleMap.add(role);
+//				});
+//				user.getUserRoles().addAll(roleMap);
+//			}
 			tempUser = userRepository.save(user);
 		}
 
@@ -149,6 +149,11 @@ public class UserServiceImpl implements UserService {
 
 		String str = restTemplate.postForObject("http://NOTIFICATION-SERVICE/", email, String.class);
 		return str;
+	}
+
+	@Override
+	public List<User> getDoctor() {
+		return userRepository.getUsersBasedOnRole(UserRoles.ROLE_PHYSICIAN.toString());
 	}
 
 }

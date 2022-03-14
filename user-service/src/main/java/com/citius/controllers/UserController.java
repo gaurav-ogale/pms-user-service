@@ -8,7 +8,6 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -120,12 +119,17 @@ public class UserController {
 		return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
 
 	}
-	
+
 	@Operation(summary = "Password Reset")
 	@GetMapping("/reset/{username}")
-	public String forgotPassword(@PathVariable String username){
+	public String forgotPassword(@PathVariable String username) {
 		String res = userService.sendPasswordResetEmail(username);
 		return res;
+	}
+
+	@GetMapping("/employee/doctor")
+	public List<User> getDoctors() {
+		return userService.getDoctor();
 	}
 
 }

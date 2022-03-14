@@ -21,4 +21,5 @@ public interface UserService {
 	String forgetPassword(String username);
 	String updateIsActive(String userName);
 	String sendPasswordResetEmail(String username);
+	List<User> getDoctor();
 }
