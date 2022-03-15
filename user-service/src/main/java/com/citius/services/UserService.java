@@ -22,4 +22,5 @@ public interface UserService {
 	String updateIsActive(String userName);
 	String sendPasswordResetEmail(String username);
 	List<User> getDoctor();
+	List<User> getEmployees(String role);
 }

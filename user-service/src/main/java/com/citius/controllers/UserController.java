@@ -127,9 +127,9 @@ public class UserController {
 		return res;
 	}
 
-	@GetMapping("/employee/doctor")
-	public List<User> getDoctors() {
-		return userService.getDoctor();
+	@GetMapping("/employee/{role}")
+	public List<User> getEmployees(@PathVariable String role) {
+		return userService.getEmployees(role);
 	}
 
 }

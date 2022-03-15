@@ -156,4 +156,9 @@ public class UserServiceImpl implements UserService {
 		return userRepository.getUsersBasedOnRole(UserRoles.ROLE_PHYSICIAN.toString());
 	}
 
+	@Override
+	public List<User> getEmployees(String role) {
+		return userRepository.getUsersBasedOnRole(role);
+	}
+
 }
