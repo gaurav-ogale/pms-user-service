@@ -40,8 +40,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User getUser(User user) {
-		return null;
+	public User getUser(String userId) {
+		return userRepository.findById(Long.parseLong(userId)).get();
 	}
 
 	@Override

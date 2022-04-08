@@ -13,7 +13,7 @@ import com.citius.models.User_Roles;
 public interface UserService {
 
 	List<User> getAllUsers();
-	User getUser(User user);
+	User getUser(String userId);
 	User authenticateUser(String username);
 	Set<UserGroup> getUserRoles(String userName);
 	User_Roles addRolesToUser(long userId, long userGroupId);	

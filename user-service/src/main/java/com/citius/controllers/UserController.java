@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.assertj.core.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.citius.exception.UserInternalServerException;
+import com.citius.models.DoctorSpecializations;
 import com.citius.models.Employee;
 import com.citius.models.User;
 import com.citius.models.UserGroup;
@@ -48,6 +50,12 @@ public class UserController {
 	public List<User> getAllUsers() {
 		System.out.println("Inside Get Users");
 		return userService.getAllUsers();
+	}
+	
+	@Operation(summary = "Get User from User id")
+	@GetMapping("/user/{userId}")
+	public User getUser(@PathVariable String userId) {
+		return userService.getUser(userId);
 	}
 
 	@Operation(summary = "Add new User Group")
@@ -130,6 +138,11 @@ public class UserController {
 	@GetMapping("/employee/{role}")
 	public List<User> getEmployees(@PathVariable String role) {
 		return userService.getEmployees(role);
+	}
+	
+	@GetMapping("/specializations")
+	public DoctorSpecializations[] getSpecializations(){
+		return DoctorSpecializations.values();
 	}
 
 }
